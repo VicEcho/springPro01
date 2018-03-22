@@ -5,8 +5,10 @@ import com.example.demo.domain.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,8 +57,13 @@ public class HelloController {
 
     //新增用户
     @PostMapping(value="user")
-    public User addUser(@RequestBody User user) {
+    public User addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         System.out.println("user" + " " + user);
+        if (bindingResult.hasErrors()) {
+            String erroMessage = bindingResult.getFieldError().getDefaultMessage();
+            System.out.println(erroMessage);
+            return null;
+        }
         return userRepository.save(user);
     }
     //删除用户
