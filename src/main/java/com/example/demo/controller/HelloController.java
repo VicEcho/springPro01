@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.Result;
 import com.example.demo.domain.Role;
 import com.example.demo.domain.User;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -57,14 +59,22 @@ public class HelloController {
 
     //新增用户
     @PostMapping(value="user")
-    public User addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
+    public Result<User> addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
         System.out.println("user" + " " + user);
         if (bindingResult.hasErrors()) {
             String erroMessage = bindingResult.getFieldError().getDefaultMessage();
             System.out.println(erroMessage);
-            return null;
+
+//            Result result = new Result();
+//            result.setCode(1);
+//            result.setMsg("fail");
+            return ResultUtil.fail(erroMessage);
         }
-        return userRepository.save(user);
+//        Result result = new Result();
+//        result.setCode(1);
+//        result.setMsg("success");
+//        result.setData(userRepository.findAll());
+        return ResultUtil.success(userRepository.findAll());
     }
     //删除用户
     @DeleteMapping(value="user/{id}")
